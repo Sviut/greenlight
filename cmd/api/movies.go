@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"greenlight/internal/data"
 	"net/http"
@@ -26,9 +25,9 @@ func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Reques
 	// на структуру input. Если во время декодирования произошла ошибка, мы используем
 	// нашу общую вспомогательную функцию errorResponse(), чтобы отправить клиенту
 	// ответ 400 Bad Request с сообщением об ошибке.
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequestResponse(w, r, err)
 		return
 	}
 
